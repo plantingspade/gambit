@@ -68,7 +68,7 @@ A desktop interface displays the game list, an interactive board, and a move-by-
 ## ROADMAP
 
 - [x] Chess.com API sync → games appearing in a list
-- [ ] PGN parser → moves readable as structured data
+- [x] PGN parser → moves readable as structured data
 - [ ] Session-local storage → games persist during the session
 - [ ] Stockfish integration → evaluation scores per move
 - [ ] Visual eval bar → position advantage shown graphically
