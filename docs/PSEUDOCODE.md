@@ -14,7 +14,7 @@ Chess.com API → PGN Parser → Local Storage → Stockfish → Explanation Eng
 
 ## 1. Chess.com API Sync
 
-Fetches the player's recent games from the Chess.com public API on startup, parses the response, and extracts the PGN string from each game.
+Fetches the player's recent games from the Chess.com public API on startup, parses the response, and passes each game's PGN to the parser to extract headers and moves.
 
 ```
 BEGIN
@@ -24,7 +24,9 @@ BEGIN
     GET the games list from the document
     FOR each game in the list
         GET the pgn field
-        DISPLAY it
+        CALL ParseHeaders with pgn RETURNING headers
+        CALL ParseMoves with pgn RETURNING moves
+        DISPLAY headers and move count
     ENDFOR
 EXCEPTION
     WHEN request fails
@@ -36,10 +38,26 @@ END
 
 ## 2. PGN Parser
 
-*To be written.*
+Takes a raw PGN string and parses it into two structures: a set of headers (metadata such as players, date, and result) and a list of moves.
 
 ```
+ParseHeaders(pgnString)
+    SET headers to empty key-value collection
+    FOR each line in pgnString
+        IF line starts with "["
+            SPLIT line on quote character
+            SET key to first part with "[" stripped
+            SET value to middle part
+            STORE key and value in headers
+        ENDIF
+    ENDFOR
+    RETURN headers
 
+ParseMoves(pgnString)
+    GET section of pgnString after the blank line
+    REMOVE move numbers from section
+    SPLIT remaining text on spaces
+    RETURN list of moves
 ```
 
 ---
