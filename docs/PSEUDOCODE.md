@@ -24,9 +24,8 @@ BEGIN
     GET the games list from the document
     FOR each game in the list
         GET the pgn field
-        CALL ParseHeaders with pgn RETURNING headers
-        CALL ParseMoves with pgn RETURNING moves
-        DISPLAY headers and move count
+        CALL ParseGame with pgn RETURNING game
+        DISPLAY game white player and move count
     ENDFOR
 EXCEPTION
     WHEN request fails
@@ -38,7 +37,7 @@ END
 
 ## 2. PGN Parser
 
-Takes a raw PGN string and parses it into two structures: a set of headers (metadata such as players, date, and result) and a list of moves.
+Takes a raw PGN string and parses it into a Game object containing metadata (players, ratings, date, result, time control) and a list of moves.
 
 ```
 ParseHeaders(pgnString)
@@ -58,6 +57,20 @@ ParseMoves(pgnString)
     REMOVE move numbers from section
     SPLIT remaining text on spaces
     RETURN list of moves
+
+ParseGame(pgnString)
+    SET game to new Game object
+    CALL ParseHeaders with pgnString RETURNING headers
+    SET game.White to headers White value
+    SET game.Black to headers Black value
+    SET game.WhiteElo to headers WhiteElo value
+    SET game.BlackElo to headers BlackElo value
+    SET game.WonBy to headers Termination value
+    SET game.Date to headers Date value
+    SET game.TimeControl to headers TimeControl value
+    CALL ParseMoves with pgnString RETURNING moves
+    SET game.Moves to moves
+    RETURN game
 ```
 
 ---

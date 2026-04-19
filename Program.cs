@@ -36,18 +36,17 @@ class Program
             JsonElement games = doc.RootElement.GetProperty("games");
 
             // FOR EACH game in the list:
-            foreach (JsonElement game in games.EnumerateArray())
+            foreach (JsonElement gameData in games.EnumerateArray())
             {
-                // GET the PGN
-                string pgn = game.GetProperty("pgn").GetString() ?? "";
+                // GET the PGN string
+                string pgn = gameData.GetProperty("pgn").GetString() ?? "";
 
-                // PARSE the PGN into headers and moves
-                Dictionary<string, string> headers = parser.ParseHeaders(pgn);
-                List<string> moves = parser.ParseMoves(pgn);
+                // PARSE the PGN into a game object
+                Game game = parser.ParseGame(pgn);
 
-                // DISPLAY the White player and move count
-                Console.WriteLine(headers["[White "]);
-                Console.WriteLine(moves.Count + " moves");
+                // PRINT game.White and game.Moves.Count
+                Console.WriteLine(game.White);
+                Console.WriteLine(game.Moves.Count + " moves");
             }
 
             BuildAvaloniaApp()

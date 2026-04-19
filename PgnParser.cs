@@ -61,4 +61,30 @@ class PgnParser
         return moves;
     }
 
+    public Game ParseGame(string pgn)
+    {
+        // Create a new Game object
+        Game game = new Game();
+
+        // Call ParseHeaders to get the headers dictionary
+        Dictionary<string, string> headers = ParseHeaders(pgn);
+        
+
+        // Parse headers into Game properties
+        game.White = headers["[White "];
+        game.Black = headers["[Black "];
+        game.WhiteElo = headers["[WhiteElo "];
+        game.BlackElo = headers["[BlackElo "];
+        game.WonBy = headers["[Termination "];
+        game.Date = headers["[Date "];
+        game.TimeControl = headers["[TimeControl "];
+
+        // Call ParseMoves to get the list of moves
+        List<string> moves = ParseMoves(pgn);
+
+        // Parse moves into Game properties
+        game.Moves = moves;
+
+        return game;
+    }
 }
