@@ -69,7 +69,7 @@ A desktop interface displays the game list, an interactive board, and a move-by-
 
 - [x] Chess.com API sync → games appearing in a list
 - [x] PGN parser → moves readable as structured data
-- [ ] Session-local storage → games persist during the session
+- [x] Session-local storage → games persist during the session
 - [ ] Stockfish integration → evaluation scores per move
 - [ ] Visual eval bar → position advantage shown graphically
 - [ ] Explanation engine → move-by-move descriptions of what happened and why

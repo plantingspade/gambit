@@ -25,8 +25,10 @@ BEGIN
     FOR each game in the list
         GET the pgn field
         CALL ParseGame with pgn RETURNING game
-        DISPLAY game white player and move count
+        ADD game to game list
     ENDFOR
+    CALL SaveGames with game list
+    ON program exit DELETE temp directory
 EXCEPTION
     WHEN request fails
         DISPLAY error message
@@ -77,7 +79,16 @@ ParseGame(pgnString)
 
 ## 3. Local Storage
 
-*To be written.*
+Persists parsed game objects for the duration of the session. Each Game is serialised to JSON and written to a file in a temporary OS directory. The directory is deleted when the program exits.
+
+```
+SaveGames(gameList)
+    CREATE temp directory if it does not exist
+    FOR each game in gameList
+        SERIALIZE game to JSON
+        WRITE JSON to file in temp directory
+    ENDFOR
+```
 
 ---
 
